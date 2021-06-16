@@ -348,7 +348,7 @@ jobs:
     name: "Test ${{ matrix.pyver }} aarch64 build wheel"
     strategy:
       matrix:
-        pyver: [cp37-cp37m]
+        pyver: [cp37-cp37m, cp38-cp38, cp39-cp39]
     runs-on: ubuntu:20.04
     env:
       py: /opt/python/${{ matrix.pyver }}/bin/python
@@ -372,7 +372,13 @@ jobs:
             #rustup --version && \
             export MODE=debug && \
             ./pants run build-support/bin/generate_github_workflows.py && \
-            deactivate'      
+            deactivate'
+    - if: always()
+      name: Upload pants.log
+      uses: actions/upload-artifact@v2
+      with:
+        name: pants-log-wheels-linux
+        path: .pants.d/pants.log            
   build_wheels_macos:
     env:
       PANTS_REMOTE_CACHE_READ: 'false'

@@ -349,7 +349,7 @@ jobs:
     #strategy:
      # matrix:
         #pyver: [cp37-cp37m, cp38-cp38, cp39-cp39]
-    runs-on: ubuntu:20.04
+    runs-on: ubuntu-20.04
     env:
       #py: /opt/python/${{ matrix.pyver }}/bin/python
       img: quay.io/pypa/manylinux2014_aarch64

@@ -561,7 +561,7 @@ def build_pex(fetch: bool) -> None:
     if fetch:
         extra_pex_args = [
             f"--platform={plat}-{abi}"
-            for plat in ("linux_x86_64", "macosx_10.15_x86_64")
+            for plat in ("linux_x86_64", "linux_aarch64", "macosx_10.15_x86_64")
             for abi in ("cp-37-m", "cp-38-cp38", "cp-39-cp39")
         ]
         pex_name = f"pants.{CONSTANTS.pants_unstable_version}.pex"
@@ -709,8 +709,12 @@ def check_roles() -> None:
 def reversion_prebuilt_wheels() -> None:
     # First, rewrite to manylinux. See https://www.python.org/dev/peps/pep-0599/. We build on
     # Centos7, so use manylinux2014.
-    source_platform = "linux_x86_64"
-    dest_platform = "manylinux2014_x86_64"
+    if (plat == "linux_x86_64"):
+        source_platform = "linux_x86_64"
+        dest_platform = "manylinux2014_x86_64"
+    else :
+        source_platform = "linux_aarch64"
+        dest_platform = "manylinux2014_aarch64"
     unstable_wheel_dir = CONSTANTS.deploy_pants_wheel_dir / CONSTANTS.pants_unstable_version
     for whl in unstable_wheel_dir.glob(f"*{source_platform}.whl"):
         whl.rename(str(whl).replace(source_platform, dest_platform))
@@ -842,7 +846,7 @@ def check_prebuilt_wheels_present(check_dir: str | Path) -> None:
         if is_cross_platform(local_files) and len(local_files) != 6:
             formatted_local_files = ", ".join(f.name for f in local_files)
             missing_packages.append(
-                f"{package.name} (expected 6 wheels, {{macosx, linux}} x {{cp37m, cp38, cp39}}, "
+                f"{package.name} (expected 9 wheels, {{macosx, linux}} x {{cp37m, cp38, cp39}}, "
                 f"but found {formatted_local_files})"
             )
     if missing_packages:

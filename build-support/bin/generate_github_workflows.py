@@ -436,6 +436,30 @@ def test_workflow_jobs(python_versions: list[str], *, cron: bool) -> Jobs:
                         deploy_to_s3_step,
                     ],
                 },
+                "build_wheels_aarch64_linux": {
+                    "name": "Build aarch64 wheels and fs_util (Linux)",
+                    "runs-on": LINUX_VERSION,
+                    "container": "quay.io/pypa/manylinux2014_aarch64:latest",
+                    "timeout-minutes": 65,
+                    "env": DISABLE_REMOTE_CACHE_ENV,
+                    "steps": [
+                        *checkout(),
+                        install_rustup(),
+                        {
+                            "name": "Expose Pythons",
+                            "run": (
+                                'echo "PATH=${PATH}:'
+                                "/opt/python/cp37-cp37m/bin:"
+                                "/opt/python/cp38-cp38/bin:"
+                                '/opt/python/cp39-cp39/bin" >> $GITHUB_ENV'
+                            ),
+                        },
+                        setup_toolchain_auth(),
+                        build_wheels_step(is_macos=False),
+                        upload_log_artifacts(name="wheels-linux"),
+                        deploy_to_s3_step,
+                    ],
+                },                 
                 "build_wheels_macos": {
                     "name": "Build wheels and fs_util (macOS)",
                     "runs-on": MACOS_VERSION,

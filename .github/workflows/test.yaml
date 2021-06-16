@@ -345,13 +345,13 @@ jobs:
       run: ./build-support/bin/deploy_to_s3.py
     timeout-minutes: 65
   build_aarch64_wheels_linux:
-    name: "Test ${{ matrix.pyver }} aarch64 build wheel"
-    strategy:
-      matrix:
-        pyver: [cp37-cp37m, cp38-cp38, cp39-cp39]
+    name: "Build aarch64 wheel"
+    #strategy:
+     # matrix:
+        #pyver: [cp37-cp37m, cp38-cp38, cp39-cp39]
     runs-on: ubuntu:20.04
     env:
-      py: /opt/python/${{ matrix.pyver }}/bin/python
+      #py: /opt/python/${{ matrix.pyver }}/bin/python
       img: quay.io/pypa/manylinux2014_aarch64
       PANTS_REMOTE_CACHE_READ: 'false'
       PANTS_REMOTE_CACHE_WRITE: 'false'
@@ -365,14 +365,11 @@ jobs:
       run: |
             docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
             ${{ env.img }} \
-            bash -exc '${{ env.py }} -m pip install virtualenv && ${{ env.py }} -m venv .env && \
-            source .env/bin/activate && \
-            curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -v -y --default-toolchain none && \
+            bash -exc 'curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -v -y --default-toolchain none && \
             export PATH=$HOME/.cargo/bin:${PATH} && \
             #rustup --version && \
             export MODE=debug && \
-            ./pants run build-support/bin/generate_github_workflows.py && \
-            deactivate'
+            ./pants run build-support/bin/generate_github_workflows.py'
     - if: always()
       name: Upload pants.log
       uses: actions/upload-artifact@v2

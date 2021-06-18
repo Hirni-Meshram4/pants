@@ -366,9 +366,9 @@ jobs:
             docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
             ${{ env.img }} \
             bash -exc 'curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -v -y --default-toolchain none && \
-            export PATH=$HOME/.cargo/bin:${PATH} && \
+            #export PATH=$HOME/.cargo/bin:${PATH} && \
             #rustup --version && \
-            export MODE=debug && \
+            #export MODE=debug && \
             ./pants run build-support/bin/generate_github_workflows.py'
     - if: always()
       name: Upload pants.log

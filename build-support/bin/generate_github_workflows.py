@@ -388,9 +388,14 @@ def test_workflow_jobs(python_versions: list[str], *, cron: bool) -> Jobs:
                     # smoke tests of our release process.
                     """\
                     [[ "${GITHUB_EVENT_NAME}" == "pull_request" ]] && export MODE=debug
-                    ./build-support/bin/release.sh build-wheels
-                    USE_PY38=true ./build-support/bin/release.sh build-wheels
-                    USE_PY39=true ./build-support/bin/release.sh build-wheels
+                    if (plat == "linux_aarch_64"):
+                        ./build-support/bin/release.sh build-wheels -q
+                        USE_PY38=true ./build-support/bin/release.sh build-wheels -q
+                        USE_PY39=true ./build-support/bin/release.sh build-wheels -q
+                    else :
+                        ./build-support/bin/release.sh build-wheels
+                        USE_PY38=true ./build-support/bin/release.sh build-wheels
+                        USE_PY39=true ./build-support/bin/release.sh build-wheels
                     ./build-support/bin/release.sh build-fs-util
                     """
                 ),

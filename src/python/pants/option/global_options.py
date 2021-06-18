@@ -399,7 +399,7 @@ class LocalStoreOptions:
         return cls(
             store_dir=str(Path(options.local_store_dir).resolve()),
             processes_max_size_bytes=options.local_store_processes_max_size_bytes,
-            files_max_size_bytes=options.local_store_files_max_size_bytes,
+            files_max_size_bytes=25600000000, #options.local_store_files_max_size_bytes,
             directories_max_size_bytes=options.local_store_directories_max_size_bytes,
             shard_count=options.local_store_shard_count,
         )

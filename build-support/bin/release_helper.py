@@ -441,7 +441,7 @@ def build_pants_wheels() -> None:
 
     dest = CONSTANTS.deploy_pants_wheel_dir / version
     dest.mkdir(parents=True, exist_ok=True)
-
+    print ("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@_wheel_building_@@@@@@@@@@@@@@")
     args = (
         "./pants",
         # TODO(#9924).

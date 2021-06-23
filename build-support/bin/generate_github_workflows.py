@@ -443,8 +443,11 @@ def test_workflow_jobs(python_versions: list[str], *, cron: bool) -> Jobs:
                     "timeout-minutes": 65,
                     "env": DISABLE_REMOTE_CACHE_ENV,
                     "steps": [
+                        print ("1111111111111111111111111111111111111111111111111"),
                         *checkout(),
+                        print ("2222222222222222222222222222222222222222222222"),
                         install_rustup(),
+                        print ("3333333333333333333333333333333333333333333333333"),
                         {
                             "name": "Expose Pythons",
                             "run": (
@@ -454,9 +457,13 @@ def test_workflow_jobs(python_versions: list[str], *, cron: bool) -> Jobs:
                                 '/opt/python/cp39-cp39/bin" >> $GITHUB_ENV'
                             ),
                         },
+                        print ("44444444444444444444444444444444444444444444444444"),
                         setup_toolchain_auth(),
+                        print ("5555555555555555555555555555555555555555555555"),
                         build_wheels_step(is_macos=False),
+                        print ("6666666666666666666666666666666666666666666666666666"),
                         upload_log_artifacts(name="wheels-linux"),
+                        print ("77777777777777777777777777777777777777777777777777777"),
                         deploy_to_s3_step,
                     ],
                 },                 

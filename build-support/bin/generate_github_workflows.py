@@ -388,7 +388,9 @@ def test_workflow_jobs(python_versions: list[str], *, cron: bool) -> Jobs:
                     # smoke tests of our release process.
                     """\
                     [[ "${GITHUB_EVENT_NAME}" == "pull_request" ]] && export MODE=debug
+                    print ("!!!!!!!!!!!!!!!!!!!!!!!!!!!wheel_building!!!!!!!!!!!!!!!!!!!!!!!!")
                     ./build-support/bin/release.sh build-local-pex
+                    print ("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@success@@@@@@@@@@@@@@@@@@@@@@@@@@@")
                     USE_PY38=true ./build-support/bin/release.sh build-local-pex
                     USE_PY39=true ./build-support/bin/release.sh build-local-pex
                     ./build-support/bin/release.sh build-fs-util
